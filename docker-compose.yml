@@ -1,0 +1,64 @@
+version: '3.8'
+
+x-template: &template
+    networks:
+        - bell
+    env_file:
+        - .env.local
+    environment:
+        COMPOSE_HTTP_TIMEOUT: 600
+        COMPOSER_MEMORY_LIMIT: -1
+        PHP_INI_SCAN_DIR: /usr/local/etc/php/conf.d:/usr/local/etc/php/dev-conf.d
+        XDEBUG_CONFIG: "remote_host=host.docker.internal remote_port=9001"
+        PHP_IDE_CONFIG: "serverName=bell_backend"
+    volumes:
+        - .:/opt/app:delegated
+    depends_on:
+        - bell_db
+
+x-fpm-template: &fpm
+    <<: *template
+    build:
+        context: .
+        dockerfile: build/local/Dockerfile
+
+services:
+    bell_backend:
+        <<: *fpm
+        container_name: bell_backend
+
+    bell_server:
+        image: nginx:1.19
+        container_name: bell_server
+        networks:
+            - bell
+        ports:
+            - 81:80
+            - 444:443
+        depends_on:
+            - bell_backend
+        volumes:
+            - ./build/local/nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./build/local/nginx/bell.conf:/etc/nginx/conf.d/bell.conf
+            - ./public:/opt/app/public
+            - ./var/log/nginx:/var/log/nginx
+        restart: always
+
+    bell_db:
+        image: mysql:8
+        container_name: bell_db
+        networks:
+            - bell
+        ports:
+            - 3308:3309
+        env_file:
+            - .env.local
+        volumes:
+            - ./var/mysql-data:/var/lib/mysql
+            - ./build/local/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+
+networks:
+    bell:
+        driver: "bridge"
+        driver_opts:
+            com.docker.network.driver.mtu: 1400
