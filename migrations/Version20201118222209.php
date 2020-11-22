@@ -27,12 +27,12 @@ final class Version20201118222209 extends AbstractMigration
             $bookId = Uuid::uuid4()->toString();
             $authorId = Uuid::uuid4()->toString();
 
-            $title = 'Cook Book - ';
+            $title = "Cook Book-$i | Поваренная книга-$i";
             $created_at = '2020-11-18 22:50:07.262450';
-            $authorName = 'B`orn - ';
+            $authorName = "Born-$i";
 
-            $dataBook = ['id' => $bookId, 'title' => $title . $i, 'created_at' => $created_at];
-            $dataAuthor = ['id' => $authorId, 'name' => $authorName . $i, 'created_at' => $created_at];
+            $dataBook = ['id' => $bookId, 'title' => $title, 'created_at' => $created_at];
+            $dataAuthor = ['id' => $authorId, 'name' => $authorName, 'created_at' => $created_at];
 
             $bookIdAuthorId = ['book_id' => $bookId, 'author_id' => $authorId];
             $authorIdBooksId = ['author_id' => $authorId, 'book_id' => $bookId];

@@ -47,6 +47,9 @@ services:
     bell_db:
         image: mysql:8
         container_name: bell_db
+        build:
+            context: .
+            dockerfile: build/local/mysql/Dockerfile
         networks:
             - bell
         ports:
@@ -55,7 +58,6 @@ services:
             - .env.local
         volumes:
             - ./var/mysql-data:/var/lib/mysql
-            - ./build/local/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
 
 networks:
     bell:
