@@ -25,9 +25,11 @@ final class CreateBookArgumentResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument)
     {
-        $content = $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
         yield new RequestCreateBook(
-            $content["title"],
+            $content["ru_title"] ?? null,
+            $content["en_title"] ?? null,
             $content["author"]
         );
     }

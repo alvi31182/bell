@@ -11,27 +11,28 @@ use Ramsey\Uuid\Uuid;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20201118222209 extends AbstractMigration
+final class Version20201123202726 extends AbstractMigration
 {
-    public function getDescription(): string
+    public function getDescription() : string
     {
         return '';
     }
 
-    public function up(Schema $schema): void
+    public function up(Schema $schema) : void
     {
-        $quantity = 10;
+        /*$quantity = 10;
 
         for ($i = 0; $i < $quantity; $i++) {
 
             $bookId = Uuid::uuid4()->toString();
             $authorId = Uuid::uuid4()->toString();
 
-            $title = "Cook Book-$i | Поваренная книга-$i";
+            $ru_title = "Поваренная книга-$i";
+            $en_title = "Cook Book-$i";
             $created_at = '2020-11-18 22:50:07.262450';
             $authorName = "Born-$i";
 
-            $dataBook = ['id' => $bookId, 'title' => $title, 'created_at' => $created_at];
+            $dataBook = ['id' => $bookId, 'ru_title' => $ru_title, 'en_title' => $en_title, 'created_at' => $created_at];
             $dataAuthor = ['id' => $authorId, 'name' => $authorName, 'created_at' => $created_at];
 
             $bookIdAuthorId = ['book_id' => $bookId, 'author_id' => $authorId];
@@ -41,12 +42,11 @@ final class Version20201118222209 extends AbstractMigration
             $this->connection->insert('authors', $dataAuthor);
             $this->connection->insert('book_authors', $bookIdAuthorId);
             $this->connection->insert('author_books',$authorIdBooksId);
-        }
+        }*/
     }
 
-    public function down(Schema $schema): void
+    public function down(Schema $schema) : void
     {
-        // this down() migration is auto-generated, please modify it to your needs
 
     }
 }

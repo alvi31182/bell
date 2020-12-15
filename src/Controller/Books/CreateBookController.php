@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Books;
 
 use App\Data\Book\RequestCreateBook;
+use App\EventListener\LocaleSubscriber;
 use App\Service\Books\BookCreateService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,20 +17,26 @@ use Symfony\Component\Routing\Annotation\Route as Route;
 final class CreateBookController extends AbstractController
 {
     private BookCreateService $bookCreateService;
+    private LocaleSubscriber $localeSubscriber;
 
-    public function __construct(BookCreateService $bookCreateService)
+    public function __construct(BookCreateService $bookCreateService, LocaleSubscriber $localeSubscriber)
     {
         $this->bookCreateService = $bookCreateService;
+        $this->localeSubscriber = $localeSubscriber;
     }
 
     /**
      * @Route("/create", methods={"POST"})
-     * @param RequestCreateBook $requestCreateBook
+     * @param RequestCreateBook $request
      * @return JsonResponse
+     * @throws \Exception
      */
-    public function bookCreate(RequestCreateBook $requestCreateBook): JsonResponse
+    public function bookCreate(RequestCreateBook $request): JsonResponse
     {
-        $this->bookCreateService->create($requestCreateBook);
-        return new JsonResponse();
+        return new JsonResponse(
+            [
+                "book_created" => $this->bookCreateService->create($request)
+            ]
+        );
     }
 }

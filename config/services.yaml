@@ -10,8 +10,7 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-    App\EventSubscribers\LocaleSubscriber:
-        
+
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
@@ -28,5 +27,21 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    App\EventListener\LocaleSubscriber:
+        arguments:
+            $defaultLocale: 'ru'
+            $supportLocale: '%env(json:SUPPORT_LOCALE)%'
+
+    App\Service\Security\AuthenticatorService:
+        public: true
+        class: App\Service\Security\AuthenticatorService
+        arguments:
+            - '@App\Repository\Security\User\UserReadStorage'
+            - '@App\Service\Security\ApiTokenService'
+            - '@security.token_ttl'
+
+    security.token_ttl:
+        class: DateInterval
+        factory: [\DateInterval, 'createFromDateString']
+        arguments:
+            - '1days'

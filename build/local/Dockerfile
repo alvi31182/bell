@@ -1,4 +1,4 @@
-ARG VERSION="7.4.12-fpm"
+ARG VERSION="7.4.13-fpm"
 FROM php:${VERSION}
 
 RUN apt-get update && apt-get install -y --no-install-recommends \

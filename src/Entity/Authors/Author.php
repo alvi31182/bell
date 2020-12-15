@@ -47,6 +47,13 @@ final class Author
      */
     private \DateTimeImmutable $createdAt;
 
+    /**
+     * @var \DateTimeImmutable
+     *
+     * @ORM\Column(type="datetimetz_immutable")
+     */
+    private \DateTimeImmutable $updateAt;
+
     public function __construct(UuidInterface $id, string $name, Collection $book, \DateTimeImmutable $createdAt)
     {
         $this->id = $id;
@@ -70,4 +77,8 @@ final class Author
         return $this->createdAt;
     }
 
+    public function getUpdateAt(): \DateTimeImmutable
+    {
+        return $this->updateAt;
+    }
 }

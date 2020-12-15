@@ -29,12 +29,20 @@ final class Book
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", nullable=true, unique=true)
      */
-    private string $title;
+    private string $ru_title;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true, unique=true)
+     */
+    private string $en_title;
 
     /**
      * @var Collection
+     *
      * @ORM\ManyToMany(targetEntity="App\Entity\Authors\Author", cascade={"persist","merge"}, inversedBy="book", fetch="LAZY")
      * @ORM\JoinTable(name="book_authors",
      *      joinColumns={@ORM\JoinColumn(name="book_id", referencedColumnName="id")},
@@ -51,15 +59,24 @@ final class Book
     private \DateTimeImmutable $createdAt;
 
     /**
-     * @param UuidInterface $id
-     * @param string $title
-     * @param Collection $author
+     * @var \DateTimeImmutable
+     *
+     * @ORM\Column(type="datetimetz_immutable")
      */
-    public function __construct(UuidInterface $id, string $title, Collection $author)
+    private \DateTimeImmutable $updateAt;
+
+    /**
+     * @param UuidInterface $id
+     * @param string $ru_title
+     * @param string $en_title
+     * @param array $author
+     */
+    public function __construct(UuidInterface $id, string $ru_title, string $en_title, array $author)
     {
         $this->id = $id;
-        $this->title = $title;
-        $this->author = $author;
+        $this->ru_title = $ru_title;
+        $this->en_title = $en_title;
+        $this->author = new ArrayCollection($author);
         $this->createdAt = new \DateTimeImmutable();
     }
 
@@ -68,9 +85,14 @@ final class Book
         return $this->id;
     }
 
-    public function getTitle(): string
+    public function getRuTitle(): string
     {
-        return $this->title;
+        return $this->ru_title;
+    }
+
+    public function getEnTitle(): string
+    {
+        return $this->en_title;
     }
 
     public function getAuthor(): Collection
@@ -81,5 +103,10 @@ final class Book
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    public function updateAt(): \DateTimeImmutable
+    {
+        return $this->updateAt;
     }
 }
