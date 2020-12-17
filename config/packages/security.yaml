@@ -6,10 +6,10 @@ security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         # used to reload user from session & other features (e.g. switch_user)
-        app_user_provider:
+        users:
             entity:
                 class: App\Entity\User
-                property: apiToken
+                property: email
     firewalls:
         app:
             pattern: ^/login

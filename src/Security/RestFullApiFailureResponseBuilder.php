@@ -1,9 +1,10 @@
 <?php
 
 
-namespace App\Security\Interfaces;
+namespace App\Security;
 
 
+use App\Security\Interfaces\AuthFailureResponseBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;

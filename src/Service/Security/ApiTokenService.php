@@ -16,9 +16,10 @@ final class ApiTokenService
     private TokenWriteStorage $tokenWriteStorage;
     private EntityManager $em;
 
-    public function __construct(TokenReadStorage $tokenReadStorage, TokenWriteStorage $em)
+    public function __construct(TokenReadStorage $tokenReadStorage, TokenWriteStorage $tokenWriteStorage)
     {
         $this->tokeReadStorage = $tokenReadStorage;
+        $this->tokenWriteStorage = $tokenWriteStorage;
     }
 
     public function getApiToken($token)

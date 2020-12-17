@@ -29,7 +29,7 @@ final class AuthenticatorService
     {
 
         $user = $this->userReadStorage->findByEmail($email);
-
+        
         if(!$user){
             dd('error login');
         }

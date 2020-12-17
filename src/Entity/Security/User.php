@@ -89,11 +89,6 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
-    public function getApiToken(): string
-    {
-        return $this->apiToken;
-    }
-
     public function getPassword(): string
     {
         return $this->password;
