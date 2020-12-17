@@ -8,4 +8,5 @@ composer.lock
 /public/bundles/
 /var/
 /vendor/
+/private.key
 ###< symfony/framework-bundle ###
