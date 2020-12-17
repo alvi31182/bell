@@ -1,5 +1,5 @@
 composer.lock
-/.env.local
+/.idea
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
