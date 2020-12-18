@@ -9,7 +9,6 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
-        "composer/package-versions-deprecated": "^1.0@dev",
         "nelmio/api-doc-bundle": "^3.0",
         "nyholm/psr7": "^1.3",
         "phpdocumentor/reflection-docblock": "5.x-dev",
@@ -30,8 +29,6 @@
         "symfony/yaml": "*"
     },
     "require-dev": {
-        "dama/doctrine-test-bundle": "7.0.x-dev",
-        "doctrine/doctrine-fixtures-bundle": "9999999-dev",
         "phpmetrics/phpmetrics": "dev-master",
         "symfony/maker-bundle": "^1.0@dev"
     },
