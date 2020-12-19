@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManager;
 
 final class ApiTokenService
 {
-    /*private TokenReadStorage $tokeReadStorage;
+    private TokenReadStorage $tokeReadStorage;
     private TokenWriteStorage $tokenWriteStorage;
     private EntityManager $em;
 
@@ -42,5 +42,5 @@ final class ApiTokenService
         $this->tokenWriteStorage->update($token);
 
         return $token->getToken();
-    }*/
+    }
 }

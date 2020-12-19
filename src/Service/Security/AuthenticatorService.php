@@ -29,7 +29,7 @@ final class AuthenticatorService
         if(!$user){
             dd('error login');
         }
-
+        
         return $this->apiTokenService->createToken($user, $this->tokenTtl);
     }
 
