@@ -13,11 +13,7 @@ final class AuthenticatorService
     private ApiTokenService $apiTokenService;
     private DateInterval $tokenTtl;
 
-    /**
-     * @param UserReadStorage $userReadStorage
-     * @param ApiTokenService $apiTokenService
-     * @param DateInterval $tokenTtl
-     */
+
     public function __construct(UserReadStorage $userReadStorage, ApiTokenService $apiTokenService, DateInterval $tokenTtl)
     {
         $this->userReadStorage = $userReadStorage;

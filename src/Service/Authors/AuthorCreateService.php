@@ -12,15 +12,11 @@ use Ramsey\Uuid\UuidInterface;
 
 final class AuthorCreateService
 {
-    private AuthorReadStorage $authorReadStorage;
+    /*private AuthorReadStorage $authorReadStorage;
     private AuthorWriteStorage $authorWriteStorage;
     private EntityManagerInterface $em;
 
-    /**
-     * @param AuthorReadStorage $authorReadStorage
-     * @param AuthorWriteStorage $authorWriteStorage
-     * @param EntityManagerInterface $em
-     */
+    \
     public function __construct(
         AuthorReadStorage $authorReadStorage,
         AuthorWriteStorage $authorWriteStorage,
@@ -34,5 +30,5 @@ final class AuthorCreateService
     public function create(AuthorCreateRequest $request): UuidInterface
     {
 
-    }
+    }*/
 }

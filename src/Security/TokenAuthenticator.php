@@ -6,7 +6,6 @@ namespace App\Security;
 
 use App\Security\Interfaces\AuthFailureResponseBuilder;
 use App\Service\Security\ApiTokenService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,13 +19,13 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 class TokenAuthenticator extends AbstractGuardAuthenticator
 {
 
-    private EntityManagerInterface $em;
+    //private EntityManagerInterface $em;
     private ApiTokenService $tokenService;
     private AuthFailureResponseBuilder $responseBuilder;
 
-    public function __construct(EntityManagerInterface $em, ApiTokenService $apiTokenService, AuthFailureResponseBuilder $responseBuilder)
+    public function __construct(/*EntityManagerInterface $em,*/ ApiTokenService $apiTokenService, AuthFailureResponseBuilder $responseBuilder)
     {
-        $this->em = $em;
+        //$this->em = $em;
         $this->tokenService = $apiTokenService;
         $this->responseBuilder = $responseBuilder;
     }
