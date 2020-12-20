@@ -39,6 +39,8 @@ final class ApiTokenService
             $dateInterval
         );
 
+        dd($token->getUser());
+
         $this->tokenWriteStorage->update($token);
 
         return $token->getToken();
