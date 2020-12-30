@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 final class LoginArgumentResolver implements ArgumentValueResolverInterface
 {
 
-    public function supports(Request $request, ArgumentMetadata $argument)
+    public function supports(Request $request, ArgumentMetadata $argument): bool
     {
         return UserLoginRequest::class === $argument->getType();
     }
@@ -23,9 +23,10 @@ final class LoginArgumentResolver implements ArgumentValueResolverInterface
      * @return \Generator
      * @throws \JsonException
      */
-    public function resolve(Request $request, ArgumentMetadata $argument)
+    public function resolve(Request $request, ArgumentMetadata $argument): \Generator
     {
         $content = json_decode($request->getContent(),true, 512, JSON_THROW_ON_ERROR);
+
         yield new UserLoginRequest(
             $content['email'],
             $content['password']

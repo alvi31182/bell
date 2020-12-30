@@ -39,7 +39,7 @@ final class LocaleSubscriber implements EventSubscriberInterface
         $event->getResponse()->headers->set('Content-Language', $this->currentLocale);
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             RequestEvent::class => ['onKernelRequest', 9],

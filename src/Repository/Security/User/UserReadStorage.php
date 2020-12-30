@@ -11,4 +11,5 @@ interface UserReadStorage
 {
     public function findById(UuidInterface $id): ?User;
     public function findByEmail(string $email): ?User;
+    public function checkUserPassword(string $password): User;
 }

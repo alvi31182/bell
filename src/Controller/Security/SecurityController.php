@@ -30,15 +30,19 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/login", methods={"POST"})
-     * @param UserLoginRequest $request
+     *
+     * @param UserLoginRequest $userRequest
      * @return JsonResponse
+     *
+     * @throws \Exception
      */
-    public function auth(UserLoginRequest $request): JsonResponse
+    public function authenticate(UserLoginRequest $userRequest): JsonResponse
     {
         $token = $this->authenticatorService->authenticateUser(
-            $request->getEmail(),
-            $request->getPassword()
+            $userRequest->getEmail(),
+            $userRequest->getPassword()
         );
-        return new JsonResponse(["token" => $token], Response::HTTP_OK, [], true);
+
+        return new JsonResponse(["token" => $token], Response::HTTP_OK, [], false);
     }
 }

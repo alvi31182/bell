@@ -32,9 +32,17 @@ services:
             $defaultLocale: 'ru'
             $supportLocale: '%env(json:SUPPORT_LOCALE)%'
 
+    App\EventListener\ExceptionListener\ExceptionListener:
+      tags:
+        - { name: kernel.event_listener, event: kernel.exception }
+
     App\EventListener\AuthenticatorListener:
         tags:
             [ name: kernel.event_listener ]
+
+    App\EventListener\RequestTransformerListener:
+        tags:
+            [name: kernel.event_listener ]
 
     App\Service\Security\AuthenticatorService:
         public: true

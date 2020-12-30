@@ -3,6 +3,9 @@
 namespace App\Entity\Security;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Selectable;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -41,11 +44,31 @@ class User implements UserInterface
      */
     private array $roles = [];
 
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="Device", mappedBy="user", cascade={"persist"})
+     */
+    private Collection $deviceList;
 
+    /**
+     * @var \DateTimeImmutable
+     *
+     * @ORM\Column(type="datetimetz_immutable")
+     */
+    private \DateTimeImmutable $createdAt;
+
+    /**
+     * @var \DateTimeImmutable
+     *
+     * @ORM\Column(type="datetimetz_immutable", nullable=true)
+     */
+    private \DateTimeImmutable $updatedAt;
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
+     *
+     * @ORM\Column(type="string", nullable=false, unique=true)
      */
     private string $password;
 
@@ -63,6 +86,8 @@ class User implements UserInterface
         $this->lastName = $lastName;
         $this->password = $password;
         $this->roles = $roles;
+        $this->deviceList = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?UuidInterface
@@ -94,9 +119,29 @@ class User implements UserInterface
         return $this->password;
     }
 
+    public function getDeviceList(): Collection
+    {
+        return $this->deviceList;
+    }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): \DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function isPasswordValid(string $password): bool
+    {
+        return password_verify($password, $this->password);
+    }
+
     public function getSalt(): ?string
     {
-        // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
     }
 
     public function eraseCredentials()

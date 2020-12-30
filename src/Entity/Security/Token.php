@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Entity\Security;
 
 use App\Exceptions\AuthorException\TokenExpired;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -13,11 +15,12 @@ use App\Repository\Security\ApiTokenRepository;
 /**
  * @ORM\Entity(repositoryClass=ApiTokenRepository::class)
  */
-final class Token
+ class Token
 {
-    const SIGNATURE_LENGTH = 32;
+    const SIGNATURE_LENGTH = 52;
     /**
      * @var UuidInterface
+     *
      * @ORM\Column(name="id", type="uuid")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
@@ -31,7 +34,15 @@ final class Token
     private string $token;
 
     /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="Device", mappedBy="token", cascade={"persist"})
+     */
+    private Collection $device;
+
+    /**
      * @var \DateTimeImmutable
+     *
      * @ORM\Column(type="datetimetz_immutable")
      */
     private \DateTimeImmutable $createdAt;
@@ -44,26 +55,33 @@ final class Token
     private \DateTimeImmutable $expiredAt;
 
     /**
-     * @var User
+     * @var \DateTimeImmutable
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Security\User", cascade={"persist"}, inversedBy="apiToken")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="datetimetz_immutable", nullable=true)
      */
-    private User $user;
+    private \DateTimeImmutable $updatedAt;
 
-    /**
-     * @param User $user
-     * @param \DateInterval $tokenTtl
-     * @throws \Exception
-     */
-    public function __construct(User $user, \DateInterval $tokenTtl)
+     /**
+      * @param string $token
+      * @param \DateInterval $tokenTtl
+      */
+    public function __construct(string $token, \DateInterval $tokenTtl)
     {
         $this->id = Uuid::uuid4();
-        $this->token = base64_encode(bin2hex(random_bytes(60)));
+        $this->token = $token;
         $this->createdAt = new \DateTimeImmutable();
         $this->expiredAt = (new \DateTimeImmutable())->add($tokenTtl);
-        $this->user = $user;
+        $this->device = new ArrayCollection();
     }
+
+     public function updateToken(string $token, \DateInterval $dateInterval): void
+     {
+         $this->token = $token;
+         $this->updatedAt = new \DateTimeImmutable();
+
+         $this->renewal($dateInterval);
+
+     }
 
     public function renewal(\DateInterval $tokenTtl): void
     {
@@ -110,9 +128,14 @@ final class Token
         return $this->expiredAt;
     }
 
-    public function getUser(): User
+    public function getUpdatedAt(): \DateTimeImmutable
     {
-        return $this->user;
+        return $this->updatedAt;
+    }
+
+    public function getDevice(): Collection
+    {
+        return $this->device;
     }
 
 }

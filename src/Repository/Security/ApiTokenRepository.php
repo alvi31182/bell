@@ -46,8 +46,13 @@ class ApiTokenRepository extends ServiceEntityRepository implements TokenReadSto
         $this->getEntityManager()->persist($token);
     }
 
-    public function findByToken(string $credentials): ?Token
+    public function findByToken(string $token): ?Token
     {
-        return $this->findOneBy(['token' => $credentials]);
+        return $this->findOneBy(['token' => $token]);
+    }
+
+    public function findByTokenUserId(string $deviceId): ?Token
+    {
+        return $this->findOneBy(['device' => $deviceId]);
     }
 }

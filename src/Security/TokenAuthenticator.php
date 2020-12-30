@@ -4,8 +4,17 @@ declare(strict_types=1);
 
 namespace App\Security;
 
+use App\Data\User\UserData;
+use App\Entity\Security\Device;
+use App\Entity\Security\Token;
+use App\Entity\Security\User;
+use App\Exceptions\Security\TokenExtractionError;
+use App\Repository\Security\DeviceRepository;
 use App\Security\Interfaces\AuthFailureResponseBuilder;
+use App\Security\Interfaces\TokenExtractor;
 use App\Service\Security\ApiTokenService;
+use App\Service\Security\AuthorizeService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,57 +28,69 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 class TokenAuthenticator extends AbstractGuardAuthenticator
 {
 
-    //private EntityManagerInterface $em;
+    private EntityManagerInterface $em;
     private ApiTokenService $tokenService;
     private AuthFailureResponseBuilder $responseBuilder;
+    private TokenExtractor $tokenExtractor;
+    private AuthorizeService $authorizeService;
 
-    public function __construct(/*EntityManagerInterface $em,*/ ApiTokenService $apiTokenService, AuthFailureResponseBuilder $responseBuilder)
-    {
-        //$this->em = $em;
+    public function __construct(
+        EntityManagerInterface $em,
+        ApiTokenService $apiTokenService,
+        AuthFailureResponseBuilder $responseBuilder,
+        TokenExtractor $tokenExtractor,
+        AuthorizeService $authorizeService
+    ) {
+        $this->em = $em;
         $this->tokenService = $apiTokenService;
         $this->responseBuilder = $responseBuilder;
+        $this->tokenExtractor = $tokenExtractor;
+        $this->authorizeService = $authorizeService;
     }
 
-    public function supports(Request $request): bool
+    public function supports(Request $request): string
     {
-        return $request->headers->has('Authorization')
-            && 0 === strpos($request->headers->get('Authorization'), 'Bearer ');
+        try {
+            return $this->tokenExtractor($request);
+        }catch (TokenExtractionError $extractionError){
+            return $extractionError->getMessage();
+        }
     }
 
-    public function getCredentials(Request $request)
+    public function getCredentials(Request $request): Token
     {
-        $authorizationHeader = $request->headers->get('Authorization');
-        // skip beyond "Bearer "
-        return substr($authorizationHeader, 7);
+        return $this->authorizeService->authorize($this->tokenExtractor($request));
     }
 
-    public function getUser($credentials, UserProviderInterface $userProvider)
+    public function getUser($credentials, UserProviderInterface $userProvider): ?UserInterface
     {
-
-        dd($credentials);
         $token = $this->tokenService->findByToken($credentials);
 
+        $device = $this->em->getRepository(Device::class)->findOneBy(['id' => $token->getDevice()->first()]);
+        $user = $this->em->getRepository(User::class)->findOneBy(['id' => $device->getUser()->getId()]);
+
+        // dd($user->getEmail());
         if (!$token) {
             throw new CustomUserMessageAuthenticationException(
                 'Invalid API Token'
             );
         }
 
-        if(!$token->isAlive()){
+        if (!$token->isAlive()) {
             throw new CustomUserMessageAuthenticationException(
                 'Token expired'
             );
         }
 
-        return $token->getToken();
+        return $userProvider->loadUserByUsername($user->getEmail());
     }
 
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-        dd('checking credentials');
+        return true;
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): JsonResponse
     {
         return new JsonResponse(
             [
@@ -91,6 +112,16 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function start(Request $request, AuthenticationException $authException = null): Response
     {
         return $this->responseBuilder->unauthorized($authException);
+    }
+
+    public function getTokenExtractor(): TokenExtractor
+    {
+        return $this->tokenExtractor;
+    }
+
+    public function tokenExtractor(Request $request)
+    {
+        return $this->getTokenExtractor()->extract($request);
     }
 
 }
