@@ -59,7 +59,6 @@ services:
         volumes:
             - ./var/mysql-data:/var/lib/mysql
             - ./build/local/mysql/my.conf:/etc/mysql/conf.d
-
 networks:
     bell:
         driver: "bridge"
