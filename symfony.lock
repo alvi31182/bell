@@ -111,6 +111,9 @@
     "exsyst/swagger": {
         "version": "v0.4.2"
     },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "1.x-dev"
+    },
     "laminas/laminas-code": {
         "version": "3.5.x-dev"
     },

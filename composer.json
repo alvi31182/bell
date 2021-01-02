@@ -9,7 +9,6 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
-        "ext-http": "*",
         "composer/package-versions-deprecated": "^1.0@dev",
         "doctrine/annotations": "^1.12@dev",
         "doctrine/data-fixtures": "^1.4@dev",
