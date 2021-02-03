@@ -156,13 +156,13 @@ EOF
 			echo
 		done
 
-		# When using a local socket, mysqladmin shutdown will only complete when the server is actually down
+
 		mysqladmin --defaults-extra-file="$PASSFILE" shutdown -uroot --socket="$SOCKET"
 		rm -f "$PASSFILE"
 		unset PASSFILE
 		echo "[Entrypoint] Server shut down"
 
-		# This needs to be done outside the normal init, since mysqladmin shutdown will not work after
+
 		if [ ! -z "$MYSQL_ONETIME_PASSWORD" ]; then
 			if [ -z "yes" ]; then
 				echo "[Entrypoint] User expiration is only supported in MySQL 5.6+"

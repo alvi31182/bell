@@ -67,13 +67,19 @@ class Device
     private Token $token;
 
     /**
+     * @var \DateTimeImmutable
+     *
+     * @ORM\Column(type="datetimetz_immutable", nullable=false)
+     */
+    private \DateTimeImmutable $createdAt;
+
+    /**
      * Device constructor.
      * @param UuidInterface $id
      * @param User $user
      * @param Token $token
      * @param string $hardwareId
      * @param string $name
-     * @param bool $isDeleted
      */
     public function __construct(
         UuidInterface $id,
@@ -88,6 +94,7 @@ class Device
         $this->name = $name;
         $this->isDeleted = false;
         $this->token = $token;
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): UuidInterface
@@ -118,5 +125,10 @@ class Device
     public function getToken(): Token
     {
         return $this->token;
+    }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
     }
 }

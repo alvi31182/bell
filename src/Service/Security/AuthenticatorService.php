@@ -4,20 +4,16 @@ declare(strict_types=1);
 
 namespace App\Service\Security;
 
-use App\Entity\Security\Device;
-use App\Entity\Security\Token;
-use App\Entity\Security\User;
+use App\Data\User\UserData;
 use App\Repository\Security\DeviceReadStorage;
 use App\Repository\Security\User\UserReadStorage;
 use App\Service\Security\Exception\NotFoundUserException;
 use App\Service\Security\Exception\ValidationPasswordException;
 use DateInterval;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
-use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\TokenNotFoundException;
 
 final class AuthenticatorService
 {
@@ -27,6 +23,7 @@ final class AuthenticatorService
     private UserPasswordEncoderInterface $passwordEncode;
     private DeviceReadStorage $deviceReadStorage;
     private DeviceService $deviceService;
+    private EventDispatcherInterface $dispatch;
 
     public function __construct(
         UserReadStorage $userReadStorage,
@@ -34,7 +31,8 @@ final class AuthenticatorService
         DateInterval $tokenTtl,
         UserPasswordEncoderInterface $passwordEncode,
         DeviceReadStorage $deviceReadStorage,
-        DeviceService $deviceService
+        DeviceService $deviceService,
+        EventDispatcherInterface $dispatch
     ) {
         $this->userReadStorage = $userReadStorage;
         $this->apiTokenService = $apiTokenService;
@@ -42,6 +40,7 @@ final class AuthenticatorService
         $this->passwordEncode = $passwordEncode;
         $this->deviceReadStorage = $deviceReadStorage;
         $this->deviceService = $deviceService;
+        $this->dispatch = $dispatch;
     }
 
     /**
@@ -75,4 +74,8 @@ final class AuthenticatorService
     }
 
 
+    public function logoutUser(string $token)
+    {
+        $this->apiTokenService->resetToken($token);
+    }
 }

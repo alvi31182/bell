@@ -102,7 +102,7 @@ class User implements UserInterface
 
     public function getUsername(): string
     {
-        return $this->email;
+        return $this->firstName;
     }
 
     public function getRoles(): array

@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Repository\Security;
 
 use App\Entity\Security\Device;
+use App\Entity\Security\Token;
 use App\Repository\Security\Device\DeviceWriteStorage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,11 +19,6 @@ class DeviceRepository extends ServiceEntityRepository implements DeviceReadStor
         parent::__construct($registry, Device::class);
     }
 
-    public function findById(string $id): ?Device
-    {
-        return $this->findOneBy(['user' => $id]);
-    }
-
     /**
      * @param Device $device
      * @throws ORMException
@@ -30,5 +27,22 @@ class DeviceRepository extends ServiceEntityRepository implements DeviceReadStor
     {
         $this->_em->persist($device);
         $this->_em->flush();
+    }
+
+    public function findById(string $id): ?Device
+    {
+        return $this->findOneBy(['user' => $id]);
+    }
+
+    /**
+     * @param string $tokenId
+     *
+     * @return array|null
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     */
+    public function findByTokenId(string $tokenId): ?Device
+    {
+        return $this->findOneBy(['token' => $tokenId]);
     }
 }

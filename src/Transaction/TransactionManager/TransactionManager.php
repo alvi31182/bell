@@ -16,36 +16,47 @@ final class TransactionManager implements TransactionHandler
         $this->em = $em;
     }
 
+    /**
+     * @param callable $function
+     * @return bool
+     * @throws \Throwable
+     */
+    public function transaction(callable $function): bool
+    {
+        $this->begin();
+        $result = null;
+        try {
+            $result = call_user_func($function);
+        } catch (\Throwable $e) {
+            $this->rollback();
+            throw $e;
+        }
+        $this->commit();
+        return $result;
+    }
+
     public function begin()
     {
-        $this->getEntityManager()->beginTransaction();
+        $this->em->beginTransaction();
     }
 
     public function commit()
     {
-        $this->getEntityManager()->flush();
-        $this->getEntityManager()->commit();
+        $this->em->flush();
+        $this->em->commit();
         $this->clear();
     }
 
     public function rollback()
     {
         $this->clear();
-        $this->getEntityManager()->rollback();
+        $this->em->rollback();
     }
 
     public function clear()
     {
-        if(!$this->getEntityManager()->getConnection()->isTransactionActive()){
-            $this->getEntityManager()->clear();
+        if(!$this->em->getConnection()->isTransactionActive()){
+            $this->em->clear();
         }
-    }
-
-    /**
-     * @return EntityManagerInterface
-     */
-    public function getEntityManager(): EntityManagerInterface
-    {
-        return $this->em;
     }
 }

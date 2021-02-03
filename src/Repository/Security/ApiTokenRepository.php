@@ -10,6 +10,7 @@ use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Security\Core\Exception\TokenNotFoundException;
 
 class ApiTokenRepository extends ServiceEntityRepository implements TokenReadStorage, TokenWriteStorage
 {
@@ -48,7 +49,13 @@ class ApiTokenRepository extends ServiceEntityRepository implements TokenReadSto
 
     public function findByToken(string $token): ?Token
     {
-        return $this->findOneBy(['token' => $token]);
+        $foundToken = $this->findOneBy(['token' => $token]);
+
+        if(!$foundToken){
+            throw new TokenNotFoundException(sprintf('This token not found'));
+        }
+
+        return $foundToken;
     }
 
     public function findByTokenUserId(string $deviceId): ?Token

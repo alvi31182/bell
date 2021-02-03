@@ -4,44 +4,47 @@ declare(strict_types=1);
 
 namespace App\Service\Security;
 
-use App\Entity\Security\Device;
 use App\Entity\Security\Token;
 use App\Entity\Security\User;
-use App\Repository\Security\Device\DeviceWriteStorage;
+use App\Event\Security\DeviceEvent;
 use App\Repository\Security\DeviceReadStorage;
 use App\Repository\Security\User\UserReadStorage;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class DeviceService
 {
     private DeviceReadStorage $deviceReadStorage;
-    private DeviceWriteStorage $deviceWriteStorage;
     private UserReadStorage $userReadStorage;
+    private EventDispatcherInterface $dispatch;
 
     public function __construct(
         DeviceReadStorage $deviceReadStorage,
-        DeviceWriteStorage $deviceWriteStorage,
-        UserReadStorage $userReadStorage
-    ) {
+        UserReadStorage $userReadStorage,
+        EventDispatcherInterface $dispatch
+    )
+    {
         $this->deviceReadStorage = $deviceReadStorage;
-        $this->deviceWriteStorage = $deviceWriteStorage;
         $this->userReadStorage = $userReadStorage;
+        $this->dispatch = $dispatch;
     }
 
-    public function create(User $user, Token $token)
+    public function create(User $user, Token $token): void
     {
         $hardwareId = Request::createFromGlobals()->headers->get('User-Agent');
 
-        $device = new Device(
-            Uuid::uuid4(),
-            $user,
-            $token,
-            $hardwareId,
-            'tt'
+        $token->createDevice($user, $hardwareId);
+
+        $device = $this->deviceReadStorage->findById($user->getId()->toString());
+
+        $event = new DeviceEvent(
+            $device->getId()->toString(),
+            $device->getHardwareId(),
+            $device->getName(),
+            $device->getToken()->getToken(),
+            $device->getCreatedAt()
         );
 
-        $this->deviceWriteStorage->add($device);
+        $this->dispatch->dispatch($event, DeviceEvent::NAME);
     }
 }

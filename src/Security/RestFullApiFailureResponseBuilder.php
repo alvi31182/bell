@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Security;
-
 
 use App\Security\Interfaces\AuthFailureResponseBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity\Security;
 
+use App\Event\Security\DeviceEvent;
 use App\Exceptions\AuthorException\TokenExpired;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use App\Repository\Security\ApiTokenRepository;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @ORM\Entity(repositoryClass=ApiTokenRepository::class)
@@ -78,9 +80,7 @@ use App\Repository\Security\ApiTokenRepository;
      {
          $this->token = $token;
          $this->updatedAt = new \DateTimeImmutable();
-
          $this->renewal($dateInterval);
-
      }
 
     public function renewal(\DateInterval $tokenTtl): void
@@ -90,7 +90,7 @@ use App\Repository\Security\ApiTokenRepository;
 
     public function markAsExpired(): void
     {
-        $this->expiredAt = new \DateTimeImmutable('-1second');
+        $this->expiredAt = new \DateTimeImmutable();
     }
 
     public function isAlive(): bool
@@ -106,6 +106,20 @@ use App\Repository\Security\ApiTokenRepository;
         if(!$this->isAlive()) {
             throw new TokenExpired(sprintf('Token expired %s', $this->getId()->toString()));
         }
+
+    }
+
+    public function createDevice(User $user, string $hardwireId): void
+    {
+        $device = new Device(
+            Uuid::uuid4(),
+            $user,
+            $this,
+            $hardwireId,
+            'dd'
+        );
+
+        $this->device->add($device);
     }
 
     public function getId(): UuidInterface

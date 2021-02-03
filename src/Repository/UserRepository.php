@@ -31,7 +31,7 @@ class UserRepository extends ServiceEntityRepository implements UserReadStorage,
 
     public function findById(UuidInterface $id): ?User
     {
-        // TODO: Implement findById() method.
+        return $this->find($id);
     }
 
     /**

@@ -30,8 +30,9 @@ final class AuthorizationHeaderToken implements TokenExtractor
      */
     public function extract(Request $request): string
     {
+
         if (!$request->headers->has($this->name)) {
-            throw new TokenExtractionError(sprintf("Header $this->name not found in request."));
+            throw new TokenExtractionError();
         }
 
         $authorizationHeader = $request->headers->get($this->name);
@@ -43,7 +44,7 @@ final class AuthorizationHeaderToken implements TokenExtractor
         $headerParts = explode(' ', $authorizationHeader);
 
         if (!(2 === count($headerParts) && 0 === strcasecmp($headerParts[0], $this->prefix))) {
-            throw new TokenExtractionError("Prefix '{$this->prefix}' not found in header '{$this->name}'.");
+            throw new TokenExtractionError();
         }
 
         return $headerParts[1];

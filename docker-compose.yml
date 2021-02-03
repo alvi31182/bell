@@ -43,6 +43,21 @@ services:
             - ./public:/opt/app/public
             - ./var/log/nginx:/var/log/nginx
         restart: always
+    redis:
+        image: redis:6.2
+        build:
+            context: .
+            dockerfile: build/local/redis/Dockerfile
+        container_name: bell_redis
+        ports:
+            - 6380:6379
+        env_file:
+            -  .env.local
+        networks:
+            - bell
+        volumes:
+            - ./var/redis-data/data:/data
+            - ./var/log/redis:/data/log
 
     bell_db:
         image: mysql:8

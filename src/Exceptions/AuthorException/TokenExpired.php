@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Exceptions\AuthorException;
 
-final class TokenExpired extends \Exception
+use App\Security\Exception\SecuritySupportException;
+
+class TokenExpired extends SecuritySupportException
 {
 }

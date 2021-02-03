@@ -1,40 +1,22 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\EventListener;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
+use App\Service\Security\ApiTokenService;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Http\Authentication\AuthenticatorManagerInterface;
 
 final class AuthenticatorListener
 {
     private TokenStorageInterface $tokenStorage;
-    private AuthenticatorManagerInterface $authenticationManager;
-    private $providerKey = 'dddddd';
+    private ApiTokenService $tokenService;
 
-    public function __invoke(Request $event)
+    public function __construct(TokenStorageInterface $tokenStorage, ApiTokenService $tokenService)
     {
-        $request = $event->getContent();
-        dd($request);
-        $username = $request->getUser();
-        dd($username);
-        $password = $request->getPassword();
-
-        $unauthenticatedToken = new UsernamePasswordToken(
-            $username,
-            $password,
-            $this->providerKey
-        );
-
-        dd($unauthenticatedToken->getUser());
-
-        $authenticatedToken = $this
-            ->authenticationManager
-            ->authenticate($unauthenticatedToken);
-
-        $this->tokenStorage->setToken($authenticatedToken);
+        $this->tokenStorage = $tokenStorage;
+        $this->tokenService = $tokenService;
     }
+
+
 }
