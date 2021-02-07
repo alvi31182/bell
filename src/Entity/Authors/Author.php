@@ -50,7 +50,7 @@ final class Author
     /**
      * @var \DateTimeImmutable
      *
-     * @ORM\Column(type="datetimetz_immutable")
+     * @ORM\Column(type="datetimetz_immutable", nullable=true)
      */
     private \DateTimeImmutable $updateAt;
 

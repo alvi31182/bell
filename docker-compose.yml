@@ -60,7 +60,7 @@ services:
             - ./var/log/redis:/data/log
 
     bell_db:
-        image: mysql:8
+        image: mysql:8.0
         container_name: bell_db
         build:
             context: .

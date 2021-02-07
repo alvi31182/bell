@@ -11,16 +11,17 @@ use Ramsey\Uuid\Uuid;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20201123202726 extends AbstractMigration
+final class Version20210206190329 extends AbstractMigration
 {
     public function getDescription() : string
     {
-        return '';
+        return 'Creating Books and Authors';
     }
 
     public function up(Schema $schema) : void
     {
-        /*$quantity = 10;
+
+        $quantity = 10;
 
         for ($i = 0; $i < $quantity; $i++) {
 
@@ -42,7 +43,8 @@ final class Version20201123202726 extends AbstractMigration
             $this->connection->insert('authors', $dataAuthor);
             $this->connection->insert('book_authors', $bookIdAuthorId);
             $this->connection->insert('author_books',$authorIdBooksId);
-        }*/
+
+        }
     }
 
     public function down(Schema $schema) : void

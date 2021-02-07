@@ -46,6 +46,7 @@ if [ "$1" = 'mysqld' ]; then
 	DATADIR="$(_get_config 'datadir' "$@")"
 	SOCKET="$(_get_config 'socket' "$@")"
 
+	# shellcheck disable=SC2157
 	if [ -n "$MYSQL_LOG_CONSOLE" ] || [ -n "console" ]; then
 		# Don't touch bind-mounted config files
 		if ! cat /proc/1/mounts | grep "etc/my.cnf"; then
@@ -63,6 +64,7 @@ if [ "$1" = 'mysqld' ]; then
 				exit 1
 			fi
 		fi
+		# shellcheck disable=SC2166
 		if [ -z "$MYSQL_ROOT_PASSWORD" -a -z "$MYSQL_ALLOW_EMPTY_PASSWORD" -a -z "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
 			echo >&2 '[Entrypoint] No password option specified for new database.'
 			echo >&2 '[Entrypoint]   A random onetime password will be generated.'
@@ -164,6 +166,7 @@ EOF
 
 
 		if [ ! -z "$MYSQL_ONETIME_PASSWORD" ]; then
+			# shellcheck disable=SC2157
 			if [ -z "yes" ]; then
 				echo "[Entrypoint] User expiration is only supported in MySQL 5.6+"
 			else
