@@ -5,6 +5,8 @@ namespace App\DataFixtures;
 use App\Entity\Security\Device;
 use App\Entity\Security\User;
 use App\Entity\Security\Token;
+use App\Entity\Security\UserStatus;
+use App\Entity\Security\ValueObjects\User\Email;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Ramsey\Uuid\Uuid;
@@ -38,10 +40,11 @@ class UserFixtures extends Fixture
 
         $admin = new User(
             $adminId,
-            $adminEmail,
+            new Email($adminEmail),
             $adminName,
             $adminLastName,
             $adminPassword,
+            UserStatus::enable(),
             $roleAdmin
         );
 
@@ -52,8 +55,7 @@ class UserFixtures extends Fixture
             $admin,
             $tokenAdmin,
             'browserid',
-            'google',
-            true
+            'google'
         );
 
         $manager->persist($deviceAdmin);
@@ -68,10 +70,11 @@ class UserFixtures extends Fixture
 
         $user = new User(
             $userId,
-            $userEmail,
+            new Email($userEmail),
             $userName,
             $userLastName,
             $userPassword,
+            UserStatus::enable(),
             $roleUser
         );
 
@@ -84,8 +87,7 @@ class UserFixtures extends Fixture
             $user,
             $tokenUser,
             'browserid',
-            'google',
-            true
+            'google'
         );
 
         $manager->persist($deviceUser);

@@ -6,7 +6,6 @@ use App\Entity\Security\ValueObjects\User\Email;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Selectable;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -120,6 +119,11 @@ class User implements UserInterface
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
     }
 
     public function getPassword(): string

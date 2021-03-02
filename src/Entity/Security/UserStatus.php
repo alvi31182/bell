@@ -1,12 +1,12 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Entity\Security;
 
-
 use LitGroup\Enumerable\Enumerable;
 
-class UserStatus extends Enumerable
+final class UserStatus extends Enumerable
 {
     public static function moderate(): self
     {

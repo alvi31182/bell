@@ -12,12 +12,12 @@ abstract class EnumerableType extends Type
 {
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        return $platform->getDefaultValueDeclarationSQL(['length' => 64]);
+        return $platform->getVarcharTypeDeclarationSQL(['length' => 64]);
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform): ?Enumerable
     {
-        if (null == $value){
+        if (null === $value){
             return null;
         }
 
@@ -29,6 +29,10 @@ abstract class EnumerableType extends Type
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
+        if (null === $value) {
+            return null;
+        }
+
         if (!$value instanceof Enumerable) {
             throw new \InvalidArgumentException('Value must be ' . Enumerable::class . ' type');
         }

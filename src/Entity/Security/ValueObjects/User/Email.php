@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Entity\Security\ValueObjects\User;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Embeddable
+ * @ORM\Embeddable()
  */
-class Email
+final class Email
 {
     private string $email;
 
