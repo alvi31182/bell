@@ -35,7 +35,8 @@ services:
         arguments:
             $defaultLocale: 'ru'
             $supportLocale: '%env(json:SUPPORT_LOCALE)%'
-
+    App\Service\Security\Interfaces\UserRegistrationInterface:
+        public: true
     App\EventListener\ExceptionListener\ExceptionListener:
       tags:
         - { name: kernel.event_listener, event: kernel.exception }

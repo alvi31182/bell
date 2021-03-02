@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\ArgumentResolver\Security;
 
+use App\Data\User\UserRegistrationData;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -22,12 +23,12 @@ final class RegistrationRequest implements ArgumentValueResolverInterface
 
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
-        return RegistrationRequest::class === $argument->getType();
+        return UserRegistrationData::class === $argument->getType();
     }
 
     public function resolve(Request $request, ArgumentMetadata $argument): \Generator
     {
-        $user = $this->serializer->deserialize($request->getContent(),RegistrationRequest::class,'json');
+        $user = $this->serializer->deserialize($request->getContent(),UserRegistrationData::class,'json');
 
         yield $user;
     }
