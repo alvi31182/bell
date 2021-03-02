@@ -126,6 +126,9 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.2.x-dev"
     },
+    "litgroup/enumerable": {
+        "version": "1.0.x-dev"
+    },
     "myclabs/deep-copy": {
         "version": "1.x-dev"
     },

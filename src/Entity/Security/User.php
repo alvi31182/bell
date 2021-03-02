@@ -2,6 +2,7 @@
 
 namespace App\Entity\Security;
 
+use App\Entity\Security\ValueObjects\User\Email;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -35,9 +36,9 @@ class User implements UserInterface
     private string $lastName;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Embedded(class="App\Entity\Security\ValueObjects\User\Email", columnPrefix=false)
      */
-    private string $email;
+    private Email $email;
 
     /**
      * @ORM\Column(type="json")
@@ -72,12 +73,18 @@ class User implements UserInterface
      */
     private string $password;
 
+    /**
+     * @ORM\Column(type="user_status")
+     */
+    private UserStatus $status;
+
     public function __construct(
         UuidInterface $id,
-        string $email,
+        Email $email,
         string $firstName,
         string $lastName,
         string $password,
+        UserStatus $status,
         array $roles
     ) {
         $this->id = $id;
@@ -85,6 +92,7 @@ class User implements UserInterface
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->password = $password;
+        $this->status = $status;
         $this->roles = $roles;
         $this->deviceList = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
