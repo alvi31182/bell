@@ -2,7 +2,7 @@
 
 namespace App\Entity\Security;
 
-use App\Entity\Security\ValueObjects\User\Email;
+use App\Entity\Security\ValueObjects\Email;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -23,19 +23,17 @@ class User implements UserInterface
     private UuidInterface $id;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     private string $firstName;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     private string $lastName;
 
     /**
-     * @ORM\Embedded(class="App\Entity\Security\ValueObjects\User\Email", columnPrefix=false)
+     * @ORM\Embedded(class="App\Entity\Security\ValueObjects\Email", columnPrefix=false)
      */
     private Email $email;
 
@@ -52,22 +50,16 @@ class User implements UserInterface
     private Collection $deviceList;
 
     /**
-     * @var \DateTimeImmutable
-     *
      * @ORM\Column(type="datetimetz_immutable")
      */
     private \DateTimeImmutable $createdAt;
 
     /**
-     * @var \DateTimeImmutable
-     *
      * @ORM\Column(type="datetimetz_immutable", nullable=true)
      */
     private \DateTimeImmutable $updatedAt;
 
     /**
-     * @var string The hashed password
-     *
      * @ORM\Column(type="string", nullable=false, unique=true)
      */
     private string $password;
@@ -100,11 +92,6 @@ class User implements UserInterface
     public function getId(): ?UuidInterface
     {
         return $this->id;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
     }
 
     public function getUsername(): string

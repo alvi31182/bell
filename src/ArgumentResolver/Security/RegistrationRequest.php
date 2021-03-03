@@ -28,8 +28,8 @@ final class RegistrationRequest implements ArgumentValueResolverInterface
 
     public function resolve(Request $request, ArgumentMetadata $argument): \Generator
     {
-        $user = $this->serializer->deserialize($request->getContent(),UserRegistrationData::class,'json');
-
+        $user = $this->serializer->deserialize($request->getContent(), UserRegistrationData::class, 'json');
+        dd($user);
         yield $user;
     }
 }

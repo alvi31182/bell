@@ -4,11 +4,16 @@ namespace App\Repository;
 
 use App\Entity\Security\User;
 use App\Repository\Security\User\UserReadStorage;
+use App\Repository\Security\User\UserWriteStorage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query\QueryException;
 use Doctrine\Persistence\ManagerRegistry;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -16,7 +21,7 @@ use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository implements UserReadStorage, UserLoaderInterface
+class UserRepository extends ServiceEntityRepository implements UserReadStorage, UserWriteStorage, UserLoaderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -26,7 +31,7 @@ class UserRepository extends ServiceEntityRepository implements UserReadStorage,
 
     public function findByEmail(string $email): ?User
     {
-        return $this->findOneBy(['email' => $email]);
+        return $this->findOneBy(['email.email' => $email]);
     }
 
     public function findById(UuidInterface $id): ?User
@@ -37,8 +42,8 @@ class UserRepository extends ServiceEntityRepository implements UserReadStorage,
     /**
      * @param string $password
      * @return User
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws NonUniqueResultException
+     * @throws QueryException
      */
     public function checkUserPassword(string $password): User
     {
@@ -50,6 +55,11 @@ class UserRepository extends ServiceEntityRepository implements UserReadStorage,
             ->getOneOrNullResult();
     }
 
+    /**
+     * @param string $usernameOrEmail
+     * @return int|mixed|string|UserInterface|null
+     * @throws NonUniqueResultException
+     */
     public function loadUserByUsername(string $usernameOrEmail)
     {
         $entityManager = $this->getEntityManager();
@@ -59,5 +69,14 @@ class UserRepository extends ServiceEntityRepository implements UserReadStorage,
         )
             ->setParameter('query', $usernameOrEmail)
             ->getOneOrNullResult();
+    }
+
+    /**
+     * @param User $user
+     * @throws ORMException
+     */
+    public function add(User $user): void
+    {
+       $this->_em->persist($user);
     }
 }

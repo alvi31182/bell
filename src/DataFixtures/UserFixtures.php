@@ -6,7 +6,7 @@ use App\Entity\Security\Device;
 use App\Entity\Security\User;
 use App\Entity\Security\Token;
 use App\Entity\Security\UserStatus;
-use App\Entity\Security\ValueObjects\User\Email;
+use App\Entity\Security\ValueObjects\Email;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Ramsey\Uuid\Uuid;

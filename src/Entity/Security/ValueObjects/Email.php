@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Entity\Security\ValueObjects\User;
+namespace App\Entity\Security\ValueObjects;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -11,6 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 final class Email
 {
+    /**
+     * @ORM\Column(type="string", unique=true, nullable=false)
+     */
     private string $email;
 
     public function __construct(string $email)
