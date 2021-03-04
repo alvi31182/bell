@@ -3,6 +3,7 @@
 namespace App\Entity\Security;
 
 use App\Entity\Security\ValueObjects\Email;
+use App\Entity\Security\ValueObjects\Password;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -60,9 +61,9 @@ class User implements UserInterface
     private \DateTimeImmutable $updatedAt;
 
     /**
-     * @ORM\Column(type="string", nullable=false, unique=true)
+     * @ORM\Embedded(class="App\Entity\Security\ValueObjects\Password", columnPrefix=false)
      */
-    private string $password;
+    private Password $password;
 
     /**
      * @ORM\Column(type="user_status")
@@ -74,7 +75,7 @@ class User implements UserInterface
         Email $email,
         string $firstName,
         string $lastName,
-        string $password,
+        Password $password,
         UserStatus $status,
         array $roles
     ) {
@@ -108,7 +109,7 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
-    public function getStatus(): string
+    public function getStatus(): UserStatus
     {
         return $this->status;
     }
@@ -135,7 +136,7 @@ class User implements UserInterface
 
     public function isPasswordValid(string $password): bool
     {
-        return password_verify($password, $this->password);
+        return password_verify($password, $this->password->getPassword());
     }
 
     public function getSalt(): ?string

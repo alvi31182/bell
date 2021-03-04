@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data\User;
 
+use App\Entity\Security\UserStatus;
 use Ramsey\Uuid\UuidInterface;
 
 final class UserData
@@ -13,14 +14,16 @@ final class UserData
     private UuidInterface $deviceId;
     private string $username;
     private array $roles;
+    private string $status;
 
-    public function __construct(UuidInterface $id, UuidInterface $tokenId, UuidInterface $deviceId, string $username, array $roles)
+    public function __construct(UuidInterface $id, UuidInterface $tokenId, UuidInterface $deviceId, string $username, array $roles, string $status)
     {
         $this->id = $id;
         $this->tokenId = $tokenId;
         $this->deviceId = $deviceId;
         $this->username = $username;
         $this->roles = $roles;
+        $this->status = $status;
     }
 
     public function getId(): UuidInterface
@@ -46,5 +49,13 @@ final class UserData
     public function getRoles(): array
     {
         return $this->roles;
+    }
+
+    /**
+     * @return UserStatus
+     */
+    public function getStatus(): string
+    {
+        return $this->status;
     }
 }

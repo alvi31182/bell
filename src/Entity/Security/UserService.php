@@ -6,6 +6,7 @@ namespace App\Entity\Security;
 
 use App\Data\User\UserRegistrationData;
 use App\Entity\Security\ValueObjects\Email;
+use App\Entity\Security\ValueObjects\Password;
 use App\Repository\Security\User\UserReadStorage;
 use App\Repository\Security\User\UserWriteStorage;
 use App\Service\Security\Exception\UserExistsException;
@@ -41,7 +42,7 @@ final class UserService implements UserRegistrationInterface
         if ($user) {
             throw new UserExistsException(sprintf('This user already exists'));
         }
-
+        
         $this->transaction->transaction(
             fn() =>  $this->writeStorage->add(
                 new User(
@@ -49,7 +50,7 @@ final class UserService implements UserRegistrationInterface
                     new Email($data->getEmail()),
                     $data->getFirstName(),
                     $data->getLastName(),
-                    $data->getPassword(),
+                    new Password($data->getPassword()),
                     UserStatus::moderate(),
                     ['ROLE_USER'],
                 )

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controller\Security;
 
-use App\Data\User\UserData;
 use App\Data\User\UserLoginRequest;
 use App\Service\Security\AuthenticatorService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

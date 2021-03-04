@@ -103,6 +103,7 @@ use Symfony\Component\HttpFoundation\Request;
      */
     public function authorize(): void
     {
+
         if(!$this->isAlive()) {
             throw new TokenExpired(sprintf('Token expired %s', $this->getId()->toString()));
         }
@@ -111,6 +112,7 @@ use Symfony\Component\HttpFoundation\Request;
 
     public function createDevice(User $user, string $hardwireId): void
     {
+
         $device = new Device(
             Uuid::uuid4(),
             $user,

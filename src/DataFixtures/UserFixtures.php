@@ -7,6 +7,7 @@ use App\Entity\Security\User;
 use App\Entity\Security\Token;
 use App\Entity\Security\UserStatus;
 use App\Entity\Security\ValueObjects\Email;
+use App\Entity\Security\ValueObjects\Password;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Ramsey\Uuid\Uuid;
@@ -31,11 +32,10 @@ class UserFixtures extends Fixture
         $adminEmail = 'admin@mail.ru';
         $adminName = 'Administrator';
         $adminLastName = 'Adminstratorovich';
-        $adminPassword = $this->encodePassword('administrator');
+        $adminPassword = new Password('administrator');
         $adminToken = base64_encode(bin2hex(random_bytes(60)));
         $roleAdmin = ['ROLE_ADMIN'];
         $tokenTtl = new \DateInterval("PT1H");
-
         $deviceId = Uuid::uuid4();
 
         $admin = new User(
@@ -65,7 +65,7 @@ class UserFixtures extends Fixture
         $userName = 'User';
         $userLastName = 'Userovich';
         $userToken = base64_encode(bin2hex(random_bytes(60)));
-        $userPassword = $this->encodePassword('userfirst');
+        $userPassword = new Password('userfirst');
         $roleUser = ['ROLE_USER'];
 
         $user = new User(
@@ -93,10 +93,5 @@ class UserFixtures extends Fixture
         $manager->persist($deviceUser);
 
         $manager->flush();
-    }
-
-    public function encodePassword(string $password): string
-    {
-        return password_hash($password,PASSWORD_DEFAULT);
     }
 }

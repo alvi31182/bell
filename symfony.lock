@@ -1,9 +1,21 @@
 {
+    "amphp/amp": {
+        "version": "2.x-dev"
+    },
+    "amphp/byte-stream": {
+        "version": "1.x-dev"
+    },
     "brick/math": {
         "version": "0.9.1"
     },
     "composer/package-versions-deprecated": {
         "version": "1.x-dev"
+    },
+    "composer/semver": {
+        "version": "3.x-dev"
+    },
+    "composer/xdebug-handler": {
+        "version": "1.4.5"
     },
     "dama/doctrine-test-bundle": {
         "version": "4.0",
@@ -16,6 +28,9 @@
         "files": [
             "config/packages/test/dama_doctrine_test_bundle.yaml"
         ]
+    },
+    "dnoegel/php-xdg-base-dir": {
+        "version": "v0.1.1"
     },
     "doctrine/annotations": {
         "version": "1.0",
@@ -114,6 +129,12 @@
     "exsyst/swagger": {
         "version": "v0.4.2"
     },
+    "felixfbecker/advanced-json-rpc": {
+        "version": "v3.2.0"
+    },
+    "felixfbecker/language-server-protocol": {
+        "version": "1.x-dev"
+    },
     "friendsofphp/proxy-manager-lts": {
         "version": "1.x-dev"
     },
@@ -145,6 +166,9 @@
             "config/routes/nelmio_api_doc.yaml"
         ]
     },
+    "netresearch/jsonmapper": {
+        "version": "v2.1.0"
+    },
     "nikic/php-parser": {
         "version": "v4.10.3"
     },
@@ -162,6 +186,9 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.8.0"
+    },
+    "openlss/lib-array2xml": {
+        "version": "1.0.0"
     },
     "phar-io/manifest": {
         "version": "2.0.x-dev"
@@ -303,6 +330,9 @@
     "symfony/asset": {
         "version": "v5.1.0"
     },
+    "symfony/browser-kit": {
+        "version": "v5.2.0"
+    },
     "symfony/cache": {
         "version": "v5.1.0"
     },
@@ -331,6 +361,9 @@
         "version": "2.3-dev"
     },
     "symfony/doctrine-bridge": {
+        "version": "v5.2.0"
+    },
+    "symfony/dom-crawler": {
         "version": "v5.2.0"
     },
     "symfony/dotenv": {
@@ -544,11 +577,17 @@
     "twig/twig": {
         "version": "3.x-dev"
     },
+    "vimeo/psalm": {
+        "version": "4.x-dev"
+    },
     "webimpress/safe-writer": {
         "version": "2.2.x-dev"
     },
     "webmozart/assert": {
         "version": "1.9.1"
+    },
+    "webmozart/path-util": {
+        "version": "2.3-dev"
     },
     "zircote/swagger-php": {
         "version": "2.x-dev"

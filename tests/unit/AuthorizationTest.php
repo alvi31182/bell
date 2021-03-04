@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Tests\unit;
 
-use http\Client;
+use App\Entity\Security\UserService;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class AuthorizationTest extends TestCase
+class AuthorizationTest extends WebTestCase
 {
-    public function testAuthorization()
+
+    public function testUserService()
     {
-        $client = new Client();
-        
+        $client = static::createClient();
+        dd($client);
     }
 }

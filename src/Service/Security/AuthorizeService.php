@@ -55,7 +55,8 @@ final class AuthorizeService
             $token->getId(),
             $device->getId(),
             $userRole->getUsername(),
-            $userRole->getRoles()
+            $userRole->getRoles(),
+            $device->getUser()->getStatus()->getRawValue()
         );
     }
 
